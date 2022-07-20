@@ -1,0 +1,262 @@
+what is data or information?
+data means unstructured information of the things 
+
+what is database ??
+A database is an organized collection of structured information, 
+or data, typically stored electronically in a computer system. 
+
+TypeBase - Oracle,Mysql,SqlServer,MonogoDb,MariaDb,Sqlite
+
+--------------------------------------SQL------------------
+Structure QUery Language
+
+--------------------------DDL----------------
+Data Defination Language
+1>CREATE DATABASE 21_jun_2022
+2>CREATE TABLE db_products(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    p_name varchar(50),
+    p_price float,
+    p_description text
+);
+3>ALTER TABLE db_products ADD p_size varchar(50) AFTER p_price 
+4>ALTER TABLE db_products CHANGE p_price  price int   //change Name of column
+5>ALTER TABLE db_products MODIFY p_price int;        //Change DataTYpe
+6>ALTER TABLE db_products DROP price 
+7>DROP TABLE db_products
+8>DROP DATABASE 21_jun_2022
+--------------------------DML----------------
+Data Manipulation Language
+1>INSERT INTO db_products(p_name,p_price,p_description)VALUES('NOKIA',45214,'Very Good');
+INSERT INTO db_products(p_name,p_price,p_description)VALUES('SAMSUNG',45214,'Very Fine');
+2>INSERT INTO db_products VALUES('','MOTOROLA',45214,'Very Good');
+INSERT INTO db_products VALUES('','LG',45214,'Very Fine');
+3>UPDATE  db_products SET p_price=2000 WHERE id=2
+4>UPDATE  db_products SET p_price=4000,p_description='very bad' WHERE id=3
+5>DELETE FROM db_products WHERE id = 3
+6>TRUNCATE TABLE db_products
+7>DELETE FROM db_products
+
+-------------------------DQL-----------------
+Data Query Language.
+1>SELECT * FROM `db_users`
+2>SELECT * FROM `db_users` WHERE id = 2
+3>SELECT name,email FROM `db_users` WHERE id = 2
+SELECT DISTINCT address FROM `db_users` 
+SELECT * FROM `db_users` WHERE name="jagruti" AND address="surat"
+SELECT * FROM `db_users` WHERE name="jagruti" OR address="surat"
+SELECT * FROM `db_users` WHERE NOT address="surat"
+SELECT * FROM `db_users` ORDER BY name ASC
+SELECT * FROM `db_users` ORDER BY name DESC
+SELECT * FROM `db_users` LIMIT 3
+---------------------Agrigate Function---------------------------
+MIN
+	SELECT MIN(marks) FROM `db_users`
+MAX
+	SELECT MAX(marks) FROM `db_users`
+AVG
+	SELECT AVG(marks) FROM `db_users`
+SUM
+	SELECT SUM(marks) FROM `db_users`
+COUNT
+	SELECT COUNT(id) FROM `db_users`
+
+------------------------LIKE-----------------------
+SELECT * FROM `db_users` WHERE name LIKE 's%'
+SELECT * FROM `db_users` WHERE name LIKE '%n'
+SELECT * FROM `db_users` WHERE name LIKE '%z%'
+SELECT * FROM `db_users` WHERE name LIKE '_n%'
+SELECT * FROM `db_users` WHERE name LIKE 's%m'
+---------------------------------IN--------------------------
+SELECT * FROM `db_users` WHERE address IN("surat","navsari")
+--------------------------------BETWEEN---------------
+SELECT * FROM `db_users` WHERE marks BETWEEN 20 AND 80
+---------------------------ALIAS---------------
+SELECT name as UserName FROM `db_users`
+--------------------------GROUP BY--------------------------------
+SELECT address,COUNT(address) FROM `db_users` GROUP BY address
+SELECT COUNT(id) FROM `db_users` HAVING COUNT(id) < 6
+
+------------------------JOIN----------------------------------------
+Normalization : Normalization is reducing the inconsitancy and duplication 
+and deviding the table into small small table 
+id name email           course_name city_name couuntry_name
+1  sam  sam@gmail.com    php        surat      India
+2  raj  raj@gmail.com    Php        sUrat      indiaa
+
+----------------------------------------------------------
+db_user
+id name   email                coutry_id   course_id
+1   sam  sam@gmail.com          1            1
+2   raj  raj@gmail.com          2            2
+3   vezen  vezen@gmail.com      1            1
+
+db_country
+id coutry_name
+1   INDIA
+2   PAKISTAN
+
+db_course
+id course_name
+1  PHP
+2  JAVA
+
+-----------------------JOIN---------------------------
+CREATE TABLE db_course(
+id int PRIMARY KEY AUTO_INCREMENT,
+course_name varchar(50)
+
+);
+
+
+CREATE TABLE db_users(
+id int PRIMARY KEY AUTO_INCREMENT,
+name varchar(50),
+email varchar(50),
+course_id int,
+country_id int
+)
+
+
+
+INNER JON
+	INNER JOIN
+		SELECT db_users.id,db_users.name,db_users.email,db_course.course_name FROM db_users INNER JOIN db_course ON db_users.course_id=db_course.id
+	LEFT JOIN
+          	SELECT db_users.id,db_users.name,db_users.email,db_course.course_name FROM db_users LEFT JOIN db_course ON db_users.course_id=db_course.id
+	RIGHT JOIN
+		SELECT db_users.id,db_users.name,db_users.email,db_course.course_name FROM db_users RIGHT JOIN db_course ON db_users.course_id=db_course.id
+		
+OUTER JON
+	CROSS JOIN
+SELECT db_users.id,db_users.name,db_course.course_name FROM db_users CROSS JOIN db_course
+
+------------------------------------------Contraint----------------------------------
+Constraint is the set of rule apllied on the sql quiries....
+
+CREATE TABLE db_student(
+id int PRIMARY KEY AUTO_INCREMENT,
+name varchar(50),
+email varchar(85) UNIQUE,
+gender varchar(80) DEFAULT 'MALE',
+age int CHECK(age>18),
+marks float NOT NULL,
+course_id int,
+FOREIGN KEY(course_id) REFERENCES db_course(id)
+);
+
+what is differce Primary And Unique
+what is differce Primary And Foreign
+-----------------------------Store Proccedure---------------------------
+Procceudure is the same as the function we can wrap the executable statment into the single unit
+
+-----------------------INSERT-------------------------------
+DELIMITER //
+CREATE PROCEDURE insert_data(IN n varchar(80))
+BEGIN
+INSERT INTO db_course(course_name)VALUES(n);
+END //
+
+CALL insert_data('.NET')
+
+-----------------------DELETE--------------------------------------
+DELIMITER //
+CREATE PROCEDURE delete_data(IN cid int)
+BEGIN
+DELETE FROM db_course WHERE id=cid;
+END //
+CALL delete_data(3)
+------------------------UPDATE-------------------
+DELIMITER //
+CREATE PROCEDURE update_data(IN cid int,IN cname varchar(50))
+BEGIN
+UPDATE db_course SET course_name=cname WHERE id-cid;
+END //
+
+CALL update_data(4,'Python')
+
+----------------------SELECT WHERE----------------------
+DELIMITER //
+CREATE PROCEDURE select_where(IN cid int,OUT result varchar(50))
+BEGIN
+SELECT * FROM db_course WHERE id=cid;
+END //
+
+CALL select_where(4,@result)
+
+---------------------------------Trigger--------------------
+Trigger is the same as the procedure but it cant be call it will be autometically call
+when event is occured....
+
+After  Insert
+Before Insert
+After  Update
+Before Update
+After  Delete
+Before Delete
+
+
+CREATE TABLE demo(
+	id int PRIMARY KEY AUTO_INCREMENT,
+    name varchar(50)
+)
+
+
+CREATE TABLE demo_log(
+	id int PRIMARY KEY AUTO_INCREMENT,
+    name varchar(50),
+    lasinseted time
+)
+
+--------------------------After INSERT-----------------------------
+DELIMITER //
+CREATE TRIGGER after_insert
+AFTER INSERT ON demo
+FOR EACH ROW
+BEGIN
+	INSERT INTO demo_log(name,lastinserted)VALUES(new.name,curtime());
+END //
+-----------------------------After Updated--------------------
+DELIMITER //
+CREATE TRIGGER after_update
+AFTER UPDATE ON demo
+FOR EACH ROW
+BEGIN
+	
+    UPDATE demo_log SET name=new.name,lastupdated=curtime() WHERE id=old.id;
+END //
+
+-----------------------------------BEFORE INSERT------------------------------
+DELIMITER //
+CREATE TRIGGER before_insert
+BEFORE INSERT ON demo
+FOR EACH ROW
+BEGIN
+	 SET new.name=UCASE(new.name);
+END //
+
+--------------------------------AFTER-----------------------
+ DELIMITER//
+CREATE TRIGGER AFTER_DELETE
+AFTER DELETE on demo
+FOR EACH ROW
+BEGIN
+update 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

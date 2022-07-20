@@ -1,0 +1,40 @@
+Web App
+	FrontEnd
+	    Html/Css/Bootstrap/Javascript/Jquery
+	    ReactJs/AngularJs/VueueJs
+	BackEnd 
+		Php/Java/.net/Python/NodeJs
+
+FullStak = MEAN - MongoDb/Express/AngularJs/NodeJs
+	   MERN - MongoDb/Express/ReactJs/NodeJs
+
+------------------------------Javascript------------------
+1>javascript is the client side scriptinge Language..
+2>javascript is the interpreted language(read code line by line)
+3>javascript is use for animating the content and validate the data	
+4>javascript is not handle the filesystem
+5>javascript is not supported directly to the database
+6>javascript is cross platform language(php/java/.net/python)
+7>javascript is not required the server for execute the script\
+
+--------------------
+variable
+dataType
+function 
+class
+objects
+Array
+looping
+codion
+
+
+
+
+
+
+
+
+
+
+
+
